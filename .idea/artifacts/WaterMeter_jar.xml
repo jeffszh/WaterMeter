@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="WaterMeter:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/WaterMeter_jar</output-path>
+    <root id="archive" name="WaterMeter.jar">
+      <element id="module-output" name="WaterMeter" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/greenrobot/eventbus/3.1.1/eventbus-3.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/alibaba/fastjson/1.2.54/fastjson-1.2.54.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../NodeRedJavaLib/target/NodeRedJavaLib-1.0-SNAPSHOT.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
