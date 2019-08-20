@@ -1,0 +1,944 @@
+[
+    {
+        "id": "c149409a.e707b",
+        "type": "subflow",
+        "name": "MBus串口",
+        "info": "配置MBus操作所用到的串口。\n",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 40,
+                "wires": [
+                    {
+                        "id": "50d974b5.cff53c"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 280,
+                "y": 100,
+                "wires": [
+                    {
+                        "id": "db9eaaa1.97a0d8",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": []
+    },
+    {
+        "id": "db9eaaa1.97a0d8",
+        "type": "serial in",
+        "z": "c149409a.e707b",
+        "name": "",
+        "serial": "ca5b448c.80e938",
+        "x": 170,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "50d974b5.cff53c",
+        "type": "serial out",
+        "z": "c149409a.e707b",
+        "name": "",
+        "serial": "ca5b448c.80e938",
+        "x": 170,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "ca5b448c.80e938",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "COM9",
+        "serialbaud": "2400",
+        "databits": "8",
+        "parity": "even",
+        "stopbits": "1",
+        "waitfor": "",
+        "newline": "50",
+        "bin": "bin",
+        "out": "interbyte",
+        "addchar": "",
+        "responsetimeout": "10000"
+    },
+    {
+        "id": "2d67f3bf.dc137c",
+        "type": "subflow",
+        "name": "MBus模块_V2",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 100,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "95ef51e4.22661"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 400,
+                "y": 240,
+                "wires": [
+                    {
+                        "id": "a9cde34e.77dc6",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 400,
+                "y": 300,
+                "wires": [
+                    {
+                        "id": "3d6adf00.81b812",
+                        "port": 1
+                    }
+                ]
+            },
+            {
+                "x": 400,
+                "y": 360,
+                "wires": [
+                    {
+                        "id": "3d6adf00.81b812",
+                        "port": 2
+                    }
+                ]
+            },
+            {
+                "x": 400,
+                "y": 420,
+                "wires": [
+                    {
+                        "id": "3d6adf00.81b812",
+                        "port": 3
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "status": {
+            "x": 200,
+            "y": 300,
+            "wires": [
+                {
+                    "id": "3d6adf00.81b812",
+                    "port": 2
+                }
+            ]
+        }
+    },
+    {
+        "id": "95ef51e4.22661",
+        "type": "function",
+        "z": "2d67f3bf.dc137c",
+        "name": "注入MBus命令",
+        "func": "msg.topic = \"Command\";\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 320,
+        "y": 80,
+        "wires": [
+            [
+                "d75a3f0f.805f5"
+            ]
+        ]
+    },
+    {
+        "id": "d75a3f0f.805f5",
+        "type": "javafunction",
+        "z": "2d67f3bf.dc137c",
+        "name": "MBus功能块",
+        "jars": [
+            "E:\\work\\IdeaPrj\\MqttFunc\\out\\artifacts\\MqttFunc_jar\\MqttFunc.jar"
+        ],
+        "imports": [
+            "import cn.amware.mqtt.MqttFunc;"
+        ],
+        "func": "return MqttFunc.action(msg);\n",
+        "outputs": 1,
+        "x": 510,
+        "y": 80,
+        "wires": [
+            [
+                "3d6adf00.81b812"
+            ]
+        ]
+    },
+    {
+        "id": "3d6adf00.81b812",
+        "type": "switch",
+        "z": "2d67f3bf.dc137c",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "TX",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "RX",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Status",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Log",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 130,
+        "y": 200,
+        "wires": [
+            [
+                "a9cde34e.77dc6"
+            ],
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "5392fb73.f14c24",
+        "type": "subflow:c149409a.e707b",
+        "z": "2d67f3bf.dc137c",
+        "name": "",
+        "x": 440,
+        "y": 180,
+        "wires": [
+            [
+                "5d4fca68.126134"
+            ]
+        ]
+    },
+    {
+        "id": "5d4fca68.126134",
+        "type": "function",
+        "z": "2d67f3bf.dc137c",
+        "name": "串口返回",
+        "func": "msg.topic = \"RX\";\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 600,
+        "y": 180,
+        "wires": [
+            [
+                "d75a3f0f.805f5"
+            ]
+        ]
+    },
+    {
+        "id": "a9cde34e.77dc6",
+        "type": "function",
+        "z": "2d67f3bf.dc137c",
+        "name": "toBuffer",
+        "func": "msg.payload = new Buffer(msg.payload);\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 280,
+        "y": 180,
+        "wires": [
+            [
+                "5392fb73.f14c24"
+            ]
+        ]
+    },
+    {
+        "id": "df8f01ba.fe5e3",
+        "type": "tab",
+        "label": "MBusMain_V2",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "c2c3e9ad.1eaae8",
+        "type": "inject",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 110,
+        "y": 40,
+        "wires": [
+            [
+                "22a87a80.a69176"
+            ]
+        ]
+    },
+    {
+        "id": "22a87a80.a69176",
+        "type": "change",
+        "z": "df8f01ba.fe5e3",
+        "name": "90EF",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "90EF",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 110,
+        "y": 100,
+        "wires": [
+            [
+                "b7d0bcaf.beedc",
+                "d993ed2e.6b4ef"
+            ]
+        ]
+    },
+    {
+        "id": "b7d0bcaf.beedc",
+        "type": "delay",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "3",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 120,
+        "y": 160,
+        "wires": [
+            [
+                "81a1882a.306748"
+            ]
+        ]
+    },
+    {
+        "id": "81a1882a.306748",
+        "type": "change",
+        "z": "df8f01ba.fe5e3",
+        "name": "905F",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "905F",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 110,
+        "y": 220,
+        "wires": [
+            [
+                "6763799d.aeab68",
+                "d993ed2e.6b4ef"
+            ]
+        ]
+    },
+    {
+        "id": "2849a23d.48d19e",
+        "type": "change",
+        "z": "df8f01ba.fe5e3",
+        "name": "90AF",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "90AF",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 110,
+        "y": 340,
+        "wires": [
+            [
+                "1279d2bb.93e34d",
+                "d993ed2e.6b4ef"
+            ]
+        ]
+    },
+    {
+        "id": "6763799d.aeab68",
+        "type": "delay",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "3",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 120,
+        "y": 280,
+        "wires": [
+            [
+                "2849a23d.48d19e"
+            ]
+        ]
+    },
+    {
+        "id": "1279d2bb.93e34d",
+        "type": "delay",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "3",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 120,
+        "y": 400,
+        "wires": [
+            [
+                "22a87a80.a69176"
+            ]
+        ]
+    },
+    {
+        "id": "7689cba3.4dbcb4",
+        "type": "debug",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 600,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "65750d4d.7828e4",
+        "type": "debug",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 600,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "b8974157.1e857",
+        "type": "debug",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 600,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "5d89fb01.7a2984",
+        "type": "debug",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 600,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "d993ed2e.6b4ef",
+        "type": "subflow:2d67f3bf.dc137c",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "env": [],
+        "x": 370,
+        "y": 220,
+        "wires": [
+            [
+                "5d89fb01.7a2984"
+            ],
+            [
+                "7689cba3.4dbcb4"
+            ],
+            [
+                "65750d4d.7828e4"
+            ],
+            [
+                "b8974157.1e857"
+            ]
+        ]
+    },
+    {
+        "id": "5c1a6071.3032b",
+        "type": "jar-func",
+        "z": "df8f01ba.fe5e3",
+        "name": "WaterMeter.jar",
+        "jar": "E:\\work\\IdeaPrj\\WaterMeter\\out\\artifacts\\WaterMeter_jar\\WaterMeter.jar",
+        "x": 600,
+        "y": 800,
+        "wires": [
+            [
+                "33c2f03f.e3b89"
+            ]
+        ]
+    },
+    {
+        "id": "789836ad.784978",
+        "type": "function",
+        "z": "df8f01ba.fe5e3",
+        "name": "注入MBus命令",
+        "func": "msg.topic = \"Command\";\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 380,
+        "y": 800,
+        "wires": [
+            [
+                "5c1a6071.3032b"
+            ]
+        ]
+    },
+    {
+        "id": "33c2f03f.e3b89",
+        "type": "switch",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "TX",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "RX",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Status",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Log",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 370,
+        "y": 960,
+        "wires": [
+            [
+                "d0504041.f5135"
+            ],
+            [
+                "a7dde038.3edb5"
+            ],
+            [
+                "15f95f40.743bf1"
+            ],
+            [
+                "b8a24c15.54b1c"
+            ]
+        ]
+    },
+    {
+        "id": "5892247f.aa831c",
+        "type": "subflow:c149409a.e707b",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "x": 660,
+        "y": 940,
+        "wires": [
+            [
+                "a820ad87.38784"
+            ]
+        ]
+    },
+    {
+        "id": "a820ad87.38784",
+        "type": "function",
+        "z": "df8f01ba.fe5e3",
+        "name": "串口返回",
+        "func": "msg.topic = \"RX\";\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 400,
+        "y": 860,
+        "wires": [
+            [
+                "5c1a6071.3032b"
+            ]
+        ]
+    },
+    {
+        "id": "d0504041.f5135",
+        "type": "function",
+        "z": "df8f01ba.fe5e3",
+        "name": "toBuffer",
+        "func": "msg.payload = new Buffer(msg.payload);\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 500,
+        "y": 940,
+        "wires": [
+            [
+                "5892247f.aa831c",
+                "2de1e092.8cdac"
+            ]
+        ]
+    },
+    {
+        "id": "2de1e092.8cdac",
+        "type": "debug",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 640,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "a7dde038.3edb5",
+        "type": "debug",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 640,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "15f95f40.743bf1",
+        "type": "debug",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 640,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "b8a24c15.54b1c",
+        "type": "debug",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 640,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "aed2121e.8fe3b",
+        "type": "inject",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 110,
+        "y": 800,
+        "wires": [
+            [
+                "79447e8d.30166"
+            ]
+        ]
+    },
+    {
+        "id": "79447e8d.30166",
+        "type": "change",
+        "z": "df8f01ba.fe5e3",
+        "name": "读水表参数",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "payload.address",
+                "pt": "msg",
+                "to": "AA AA AA AA AA AA AA ",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.ctrlCode",
+                "pt": "msg",
+                "to": "21",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.dataId",
+                "pt": "msg",
+                "to": "57 D3",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 130,
+        "y": 860,
+        "wires": [
+            [
+                "8146b720.68f248",
+                "789836ad.784978"
+            ]
+        ]
+    },
+    {
+        "id": "8146b720.68f248",
+        "type": "delay",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "3",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 120,
+        "y": 920,
+        "wires": [
+            [
+                "809a53dc.45c65"
+            ]
+        ]
+    },
+    {
+        "id": "809a53dc.45c65",
+        "type": "change",
+        "z": "df8f01ba.fe5e3",
+        "name": "读：5F 90",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.address",
+                "pt": "msg",
+                "to": "AA AA AA AA AA AA AA ",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.ctrlCode",
+                "pt": "msg",
+                "to": "01",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.dataId",
+                "pt": "msg",
+                "to": "5F 90   ",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 130,
+        "y": 980,
+        "wires": [
+            [
+                "24a4d576.f7edaa",
+                "789836ad.784978"
+            ]
+        ]
+    },
+    {
+        "id": "1f30803e.b997e",
+        "type": "change",
+        "z": "df8f01ba.fe5e3",
+        "name": "读：AF 90",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "payload.address",
+                "pt": "msg",
+                "to": "AA AA AA AA AA AA AA",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.ctrlCode",
+                "pt": "msg",
+                "to": "01",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.dataId",
+                "pt": "msg",
+                "to": "AF 90",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 130,
+        "y": 1100,
+        "wires": [
+            [
+                "8b245d61.d5077",
+                "789836ad.784978"
+            ]
+        ]
+    },
+    {
+        "id": "24a4d576.f7edaa",
+        "type": "delay",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "3",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 120,
+        "y": 1040,
+        "wires": [
+            [
+                "1f30803e.b997e"
+            ]
+        ]
+    },
+    {
+        "id": "8b245d61.d5077",
+        "type": "delay",
+        "z": "df8f01ba.fe5e3",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "3",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 120,
+        "y": 1160,
+        "wires": [
+            [
+                "79447e8d.30166"
+            ]
+        ]
+    }
+]
