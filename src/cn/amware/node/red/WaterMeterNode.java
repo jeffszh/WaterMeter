@@ -1,5 +1,6 @@
 package cn.amware.node.red;
 
+import cn.amware.node.red.mbus.Sender;
 import cn.jeffszh.lib.node.red.java.NodeRedNode;
 import com.alibaba.fastjson.JSONObject;
 
@@ -24,15 +25,38 @@ public class WaterMeterNode extends NodeRedNode {
 			payload = "没有";
 		}
 
-		OutMsg msg = new OutMsg();
-		msg.topic = "Log";
-		msg.payload = "输入payload=" + payload;
-		writeOutput(msg);
+		if (jsonObject.containsKey("topic")) {
+			String topic = jsonObject.get("topic").toString();
+			switch (topic) {
+				case "Command":
+					processCommand(payload);
+					return;
+				case "RX":
+					processRx(payload);
+					return;
+			}
+		}
+
+		LogMsg logMsg = new LogMsg();
+		logMsg.payload = "输入payload=" + payload;
+		writeOutput(logMsg);
+//		System.out.println("{\"payload\":{\"data\":[65,66,67],\"type\":\"Buffer\"}}");
 	}
 
-	@SuppressWarnings("WeakerAccess")
-	private static class OutMsg {
-		public String topic;
+	private void processCommand(String command) {
+		try {
+			new Sender(command, this).send();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void processRx(String rxString) {
+	}
+
+	@SuppressWarnings({"WeakerAccess", "unused"})
+	private static class LogMsg {
+		public String topic = "Log";
 		public String payload;
 	}
 
