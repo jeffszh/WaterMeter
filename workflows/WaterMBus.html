@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>水表MBus测试</title>
+	<script src="https://cdn.staticfile.org/jquery/1.8.3/jquery.min.js"></script>
+	<script type="text/javascript">
+        function submit1()//第二种提交方式，用普通button按钮结合JavaScript提交
+        {
+            var form1=document.getElementById("form1");
+            form1.action="http://localhost:1880/writeMeterId";     //设置提交路径
+            var s = form1.submit();            //提交
+            setResult(s);
+        }
+
+        function setResult(txt)
+        {
+        	var pnl = document.getElementById("resultPanel");
+        	pnl.innerHTML = txt;
+        }
+
+        function testAjx()
+        {
+        	$("#resultPanel").html("这样吧");
+        }
+
+        function runUrl()
+        {
+        	var params = {meterId:"none"};
+        	params.meterId = document.forms["form3"]["meterId"].value;
+        	$.ajax({
+                type:"POST",  //请求方式
+                url:"http://localhost:1880/writeMeterId",  //请求路径：页面/方法名字
+                data: params,     //参数
+                dataType:"text",
+                //contentType:"application/json; charset=utf-8",
+                beforeSend:function(XMLHttpRequest){
+                    $("#tips").text("开始调用后头方法获取图片路径,请等待");
+                    $("#resultPanel").text("开始调用后头方法获取图片路径,请等待");
+                },
+                success:function(msg){  //成功
+                    $("#resultPanel").text(msg);
+                    $("#msg01").text("调用方法结束");
+                },
+                error:function(obj, msg, e){   //异常
+                    alert("OH,NO " + msg + ": " + e);
+                }
+            });
+        }
+	</script>
+</head>
+<body>
+<form id="form1" method="post">
+	水表ID：<input type="text" name="meterId">
+	<input type="button" value="写入" onclick="submit1();">
+</form>
+<hr>
+<form id="form2" method="post" action="http://localhost:1880/writeMeterId">
+	水表ID：<input type="text" name="meterId">
+	<input type="submit" value="提交">
+</form>
+<hr>
+<form>
+	<input type="button" value="直接搞" onclick="testAjx();">
+</form>
+<hr>
+<form name="form3">
+	<input name="meterId" type="text">
+	<input type="button" value="试试" onclick="runUrl();">
+</form>
+<hr>
+<p id="resultPanel">写几个字</p>
+</body>
+</html>

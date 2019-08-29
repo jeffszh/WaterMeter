@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Sender {
@@ -64,7 +65,10 @@ public class Sender {
 //			ja.add(x);
 //		}
 //		jo.put("payload", ja);
-		jo.put("payload", bArr);
+		int[] outBuf = new int[bArr.length + 6];
+		Arrays.fill(outBuf, 0xFE);
+		System.arraycopy(bArr, 0, outBuf, 6, bArr.length);
+		jo.put("payload", outBuf);
 		node.writeOutput(jo);
 	}
 
