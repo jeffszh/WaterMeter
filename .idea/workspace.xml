@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8c2aa971-0c36-416f-ae8c-539be8ae2000" name="Default Changelist" comment="">
+    <list default="true" id="8c2aa971-0c36-416f-ae8c-539be8ae2000" name="Default Changelist" comment="添加README.md文件。">
+      <change afterPath="$PROJECT_DIR$/workflows/水表测试WEB流程.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cn/amware/node/red/mbus/Sender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/amware/node/red/mbus/Sender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/amware/node/red/WaterMeterNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/amware/node/red/WaterMeterNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/WaterMBus.html" beforeDir="false" afterPath="$PROJECT_DIR$/workflows/WaterMBus.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/workflows/水表MBus测试流程.json" beforeDir="false" afterPath="$PROJECT_DIR$/workflows/水表MBus测试流程.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -19,13 +21,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/cn/amware/node/red/WaterMeterNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="748">
-              <caret line="38" selection-start-line="38" selection-end-line="38" />
+            <state relative-caret-position="176">
+              <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#954#999#1" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -34,20 +37,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cn/amware/node/red/mbus/Sender.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
+            <state relative-caret-position="1298">
               <caret line="68" selection-start-line="68" selection-end-line="68" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/workflows/WaterMBus.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="31" selection-start-line="31" selection-end-line="31" />
             </state>
           </provider>
         </entry>
@@ -64,11 +58,38 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cn/amware/node/red/mbus/Receiver.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="902">
-              <caret line="46" selection-start-line="46" selection-end-line="46" />
+            <state relative-caret-position="374">
+              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/workflows/WaterMBus.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="363">
+              <caret line="60" selection-start-line="60" selection-end-line="60" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/workflows/水表MBus测试流程.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="9218">
+              <caret line="554" lean-forward="true" selection-start-line="554" selection-end-line="554" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/workflows/水表测试WEB流程.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="437">
+              <caret line="169" selection-start-line="169" selection-end-line="169" />
             </state>
           </provider>
         </entry>
@@ -83,6 +104,14 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>ge</find>
+      <find>data</find>
+      <find>meterid</find>
+      <find>writeMeterId</find>
+    </findStrings>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -96,10 +125,11 @@
         <option value="$PROJECT_DIR$/src/cn/amware/node/red/Receiver.java" />
         <option value="$PROJECT_DIR$/src/cn/amware/node/red/mbus/data/MeterPacket.java" />
         <option value="$PROJECT_DIR$/src/cn/amware/node/red/mbus/Receiver.java" />
-        <option value="$PROJECT_DIR$/src/cn/amware/node/red/WaterMeterNode.java" />
-        <option value="$PROJECT_DIR$/workflows/水表MBus测试流程.json" />
         <option value="$PROJECT_DIR$/src/cn/amware/node/red/mbus/Sender.java" />
         <option value="$PROJECT_DIR$/workflows/WaterMBus.html" />
+        <option value="$PROJECT_DIR$/workflows/水表MBus测试流程.json" />
+        <option value="$PROJECT_DIR$/workflows/水表测试WEB流程.json" />
+        <option value="$PROJECT_DIR$/src/cn/amware/node/red/WaterMeterNode.java" />
       </list>
     </option>
   </component>
@@ -115,6 +145,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -158,8 +190,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -237,7 +267,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26865673" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27132195" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -292,16 +322,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/../NodeRedJavaLib/target/NodeRedJavaLib-1.0-SNAPSHOT.jar!/cn/jeffszh/lib/node/red/java/NodeRedNode.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../NodeRedJavaLib/src/main/java/cn/jeffszh/lib/node/red/java/NodeRedNode.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="629">
@@ -309,17 +329,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/workflows/水表MBus测试流程.json">
+    <entry file="jar://$PROJECT_DIR$/../NodeRedJavaLib/target/NodeRedJavaLib-1.0-SNAPSHOT.jar!/cn/jeffszh/lib/node/red/java/NodeRedNode.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="13" column="47" lean-forward="true" selection-start-line="13" selection-start-column="47" selection-end-line="13" selection-end-column="47" />
+        <state relative-caret-position="651">
+          <caret line="39" column="29" selection-start-line="39" selection-start-column="29" selection-end-line="39" selection-end-column="29" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cn/amware/node/red/WaterMeterNode.java">
+    <entry file="file://$PROJECT_DIR$/src/cn/amware/node/red/mbus/Sender.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="748">
-          <caret line="38" selection-start-line="38" selection-end-line="38" />
+        <state relative-caret-position="1298">
+          <caret line="68" selection-start-line="68" selection-end-line="68" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -333,30 +353,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cn/amware/node/red/mbus/Receiver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="902">
-          <caret line="46" selection-start-line="46" selection-end-line="46" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cn/amware/node/red/mbus/Sender.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="68" selection-start-line="68" selection-end-line="68" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/workflows/WaterMBus.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="31" selection-start-line="31" selection-end-line="31" />
+        <state relative-caret-position="363">
+          <caret line="60" selection-start-line="60" selection-end-line="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflows/水表MBus测试流程.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9218">
+          <caret line="554" lean-forward="true" selection-start-line="554" selection-end-line="554" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workflows/水表测试WEB流程.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="169" selection-start-line="169" selection-end-line="169" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cn/amware/node/red/mbus/Receiver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cn/amware/node/red/WaterMeterNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#954#999#1" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

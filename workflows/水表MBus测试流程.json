@@ -69,13 +69,20 @@
 		"responsetimeout": "10000"
 	},
 	{
+		"id": "c35f8949.621d58",
+		"type": "tab",
+		"label": "MBus主流程",
+		"disabled": false,
+		"info": ""
+	},
+	{
 		"id": "90c286bb.dbc918",
 		"type": "jar-func",
 		"z": "c35f8949.621d58",
 		"name": "WaterMeter.jar",
 		"jar": "E:\\work\\IdeaPrj\\WaterMeter\\out\\artifacts\\WaterMeter_jar\\WaterMeter.jar",
-		"x": 600,
-		"y": 60,
+		"x": 760,
+		"y": 140,
 		"wires": [
 			[
 				"94ac31fa.f6e58"
@@ -90,8 +97,8 @@
 		"func": "msg.topic = \"Command\";\nreturn msg;\n",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 380,
-		"y": 60,
+		"x": 560,
+		"y": 80,
 		"wires": [
 			[
 				"90c286bb.dbc918"
@@ -125,13 +132,18 @@
 				"t": "eq",
 				"v": "Log",
 				"vt": "str"
+			},
+			{
+				"t": "eq",
+				"v": "WebResult",
+				"vt": "str"
 			}
 		],
 		"checkall": "true",
 		"repair": false,
-		"outputs": 4,
-		"x": 370,
-		"y": 220,
+		"outputs": 5,
+		"x": 450,
+		"y": 320,
 		"wires": [
 			[
 				"ac9f0373.2fd73"
@@ -144,6 +156,9 @@
 			],
 			[
 				"4d07825f.25dc9c"
+			],
+			[
+				"7bea76a3.d94778"
 			]
 		]
 	},
@@ -153,8 +168,8 @@
 		"z": "c35f8949.621d58",
 		"name": "",
 		"env": [],
-		"x": 660,
-		"y": 200,
+		"x": 780,
+		"y": 280,
 		"wires": [
 			[
 				"a7fa0f03.12266"
@@ -169,8 +184,8 @@
 		"func": "msg.topic = \"RX\";\nreturn msg;\n",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 400,
-		"y": 120,
+		"x": 580,
+		"y": 200,
 		"wires": [
 			[
 				"90c286bb.dbc918"
@@ -185,8 +200,8 @@
 		"func": "msg.payload = new Buffer(msg.payload);\nreturn msg;\n",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 500,
-		"y": 200,
+		"x": 620,
+		"y": 280,
 		"wires": [
 			[
 				"b20b3dbf.66d8a",
@@ -205,8 +220,8 @@
 		"tostatus": true,
 		"complete": "payload",
 		"targetType": "msg",
-		"x": 640,
-		"y": 280,
+		"x": 760,
+		"y": 340,
 		"wires": []
 	},
 	{
@@ -220,8 +235,8 @@
 		"tostatus": true,
 		"complete": "payload",
 		"targetType": "msg",
-		"x": 640,
-		"y": 340,
+		"x": 760,
+		"y": 380,
 		"wires": []
 	},
 	{
@@ -235,8 +250,8 @@
 		"tostatus": true,
 		"complete": "payload",
 		"targetType": "msg",
-		"x": 640,
-		"y": 400,
+		"x": 760,
+		"y": 420,
 		"wires": []
 	},
 	{
@@ -250,7 +265,7 @@
 		"tostatus": true,
 		"complete": "payload",
 		"targetType": "msg",
-		"x": 640,
+		"x": 760,
 		"y": 460,
 		"wires": []
 	},
@@ -270,7 +285,7 @@
 		"y": 60,
 		"wires": [
 			[
-				"f3129b95.754858"
+				"bee30c72.e315e"
 			]
 		]
 	},
@@ -314,11 +329,10 @@
 		"from": "",
 		"to": "",
 		"reg": false,
-		"x": 130,
-		"y": 120,
+		"x": 330,
+		"y": 80,
 		"wires": [
 			[
-				"bee30c72.e315e",
 				"f92b4b55.73af48"
 			]
 		]
@@ -338,11 +352,12 @@
 		"randomLast": "5",
 		"randomUnits": "seconds",
 		"drop": false,
-		"x": 120,
-		"y": 180,
+		"x": 100,
+		"y": 120,
 		"wires": [
 			[
-				"847e0d93.9afb3"
+				"d22dc6b0.d0b318",
+				"f3129b95.754858"
 			]
 		]
 	},
@@ -352,6 +367,13 @@
 		"z": "c35f8949.621d58",
 		"name": "读：5F 90",
 		"rules": [
+			{
+				"t": "set",
+				"p": "payload",
+				"pt": "msg",
+				"to": "{}",
+				"tot": "json"
+			},
 			{
 				"t": "set",
 				"p": "payload.address",
@@ -379,11 +401,10 @@
 		"from": "",
 		"to": "",
 		"reg": false,
-		"x": 130,
-		"y": 240,
+		"x": 330,
+		"y": 120,
 		"wires": [
 			[
-				"d22dc6b0.d0b318",
 				"f92b4b55.73af48"
 			]
 		]
@@ -428,11 +449,10 @@
 		"from": "",
 		"to": "",
 		"reg": false,
-		"x": 130,
-		"y": 360,
+		"x": 330,
+		"y": 160,
 		"wires": [
 			[
-				"d5fa4213.d42f9",
 				"f92b4b55.73af48"
 			]
 		]
@@ -452,11 +472,12 @@
 		"randomLast": "5",
 		"randomUnits": "seconds",
 		"drop": false,
-		"x": 120,
-		"y": 300,
+		"x": 100,
+		"y": 180,
 		"wires": [
 			[
-				"e02fe6a.31c2c18"
+				"d5fa4213.d42f9",
+				"847e0d93.9afb3"
 			]
 		]
 	},
@@ -475,41 +496,59 @@
 		"randomLast": "5",
 		"randomUnits": "seconds",
 		"drop": false,
-		"x": 120,
+		"x": 100,
+		"y": 240,
+		"wires": [
+			[
+				"bee30c72.e315e",
+				"e02fe6a.31c2c18"
+			]
+		]
+	},
+	{
+		"id": "fbbf6099.840bb",
+		"type": "function",
+		"z": "c35f8949.621d58",
+		"name": "注入WebRequest",
+		"func": "msg.topic = \"WebRequest\";\nreturn msg;\n",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 550,
+		"y": 140,
+		"wires": [
+			[
+				"90c286bb.dbc918"
+			]
+		]
+	},
+	{
+		"id": "ea360c3.d94a4f",
+		"type": "link in",
+		"z": "c35f8949.621d58",
+		"name": "WebRequest",
+		"links": [
+			"9a13491c.fac6a8"
+		],
+		"x": 330,
+		"y": 240,
+		"wires": [
+			[
+				"fbbf6099.840bb"
+			]
+		],
+		"l": true
+	},
+	{
+		"id": "7bea76a3.d94778",
+		"type": "link out",
+		"z": "c35f8949.621d58",
+		"name": "WebResult",
+		"links": [
+			"27da460.28e77ba"
+		],
+		"x": 475,
 		"y": 420,
-		"wires": [
-			[
-				"f3129b95.754858"
-			]
-		]
-	},
-	{
-		"id": "e2c56a50.58ddc8",
-		"type": "http in",
-		"z": "c35f8949.621d58",
-		"name": "",
-		"url": "writeMeterId",
-		"method": "post",
-		"upload": false,
-		"swaggerDoc": "",
-		"x": 350,
-		"y": 340,
-		"wires": [
-			[
-				"b6f67169.b5e65",
-				"4d07825f.25dc9c"
-			]
-		]
-	},
-	{
-		"id": "b6f67169.b5e65",
-		"type": "http response",
-		"z": "c35f8949.621d58",
-		"name": "",
-		"statusCode": "",
-		"headers": {},
-		"x": 350,
-		"y": 400,
-		"wires": []
+		"wires": [],
+		"l": true
 	}
 ]

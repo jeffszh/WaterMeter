@@ -2,7 +2,9 @@ package cn.amware.node.red;
 
 import cn.amware.node.red.mbus.Sender;
 import cn.jeffszh.lib.node.red.java.NodeRedNode;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 public class WaterMeterNode extends NodeRedNode {
 
@@ -33,6 +35,18 @@ public class WaterMeterNode extends NodeRedNode {
 					return;
 				case "RX":
 					processRx(payload);
+					return;
+				case "WebRequest":
+					@SuppressWarnings({"WeakerAccess", "unused"})
+					class WebResult {
+						public String topic = "WebResult";
+						public Object payload;
+					}
+					WebResult webResult = new WebResult();
+					String jsonStr = JSON.toJSONString(jsonObject, SerializerFeature.BrowserCompatible);
+					System.out.println("jsonObject = " + jsonStr);
+					webResult.payload = "输入的请求为：" + jsonStr;
+					writeOutput(webResult);
 					return;
 			}
 		}

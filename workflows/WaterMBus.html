@@ -40,6 +40,27 @@
 			ajaxPost(params, "http://localhost:1880/writeMeterId");
 		}
 
+		function openWebSock() {
+			var ws = new WebSocket("ws://localhost:1880/ws/mbusResult");
+			ws.onopen = function() {
+				$("#wsStatus").html("在线");
+				$("#msgPanel").html("-");
+			}
+			ws.onclose = function() {
+				$("#wsStatus").html("离线");
+				$("#msgPanel").html("X");
+			}
+			ws.onmessage = function(e) {
+				$("#msgPanel").html(e.data);
+			}
+			ws.onerror = function() {
+				$("#wsStatus").html("出错");
+				$("#msgPanel").html("ERR");
+			}
+		}
+
+		openWebSock();
+
 	</script>
 </head>
 <body>
@@ -50,6 +71,7 @@
 <hr>
 <p id="resultPanel">空</p>
 <hr>
+<div id="wsStatus"></div>
 <p id="msgPanel"></p>
 </body>
 </html>

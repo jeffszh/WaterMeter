@@ -1,0 +1,182 @@
+[
+	{
+		"id": "3782ce0.8a56732",
+		"type": "http in",
+		"z": "a2638507.6235e8",
+		"name": "",
+		"url": "writeMeterId",
+		"method": "post",
+		"upload": false,
+		"swaggerDoc": "",
+		"x": 130,
+		"y": 120,
+		"wires": [
+			[
+				"9083b6e5.4073b8"
+			]
+		]
+	},
+	{
+		"id": "851e0248.86d83",
+		"type": "http response",
+		"z": "a2638507.6235e8",
+		"name": "",
+		"statusCode": "",
+		"headers": {},
+		"x": 690,
+		"y": 160,
+		"wires": []
+	},
+	{
+		"id": "9a13491c.fac6a8",
+		"type": "link out",
+		"z": "a2638507.6235e8",
+		"name": "WebRequest",
+		"links": [
+			"ea360c3.d94a4f"
+		],
+		"x": 670,
+		"y": 240,
+		"wires": [],
+		"l": true
+	},
+	{
+		"id": "27da460.28e77ba",
+		"type": "link in",
+		"z": "a2638507.6235e8",
+		"name": "WebResult",
+		"links": [
+			"7bea76a3.d94778"
+		],
+		"x": 280,
+		"y": 360,
+		"wires": [
+			[
+				"bb848fe1.2d54"
+			]
+		],
+		"l": true
+	},
+	{
+		"id": "6154fe80.8add",
+		"type": "http in",
+		"z": "a2638507.6235e8",
+		"name": "",
+		"url": "readMeterId",
+		"method": "post",
+		"upload": false,
+		"swaggerDoc": "",
+		"x": 130,
+		"y": 60,
+		"wires": [
+			[
+				"9083b6e5.4073b8"
+			]
+		]
+	},
+	{
+		"id": "2658a39e.ecd4cc",
+		"type": "http in",
+		"z": "a2638507.6235e8",
+		"name": "",
+		"url": "readLoraParam",
+		"method": "post",
+		"upload": false,
+		"swaggerDoc": "",
+		"x": 140,
+		"y": 180,
+		"wires": [
+			[
+				"9083b6e5.4073b8"
+			]
+		]
+	},
+	{
+		"id": "d74efb9c.6e0e38",
+		"type": "http in",
+		"z": "a2638507.6235e8",
+		"name": "",
+		"url": "writeLoraParam",
+		"method": "post",
+		"upload": false,
+		"swaggerDoc": "",
+		"x": 140,
+		"y": 240,
+		"wires": [
+			[
+				"9083b6e5.4073b8"
+			]
+		]
+	},
+	{
+		"id": "9083b6e5.4073b8",
+		"type": "function",
+		"z": "a2638507.6235e8",
+		"name": "组合",
+		"func": "var reqMsg = {};\nreqMsg.payload = msg.payload;\nreqMsg.url = msg.req.url;\n\nmsg.reqMsg = reqMsg;\nreturn msg;\n",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 370,
+		"y": 160,
+		"wires": [
+			[
+				"276150e6.4fc8e",
+				"851e0248.86d83"
+			]
+		]
+	},
+	{
+		"id": "276150e6.4fc8e",
+		"type": "function",
+		"z": "a2638507.6235e8",
+		"name": "请求信息",
+		"func": "return msg.reqMsg;\n",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 500,
+		"y": 240,
+		"wires": [
+			[
+				"9a13491c.fac6a8"
+			]
+		]
+	},
+	{
+		"id": "bb848fe1.2d54",
+		"type": "websocket out",
+		"z": "a2638507.6235e8",
+		"name": "",
+		"server": "8ff91b24.b99758",
+		"client": "",
+		"x": 520,
+		"y": 360,
+		"wires": []
+	},
+	{
+		"id": "f24d568c.b81aa8",
+		"type": "comment",
+		"z": "a2638507.6235e8",
+		"name": "即时结果",
+		"info": "网页前端发送post请求时，会被分成两路处理，\n一路即时回应http响应，另一路提取相关信息，\n交给后台进行MBus操作，操作结果用WebSocket回发。\n",
+		"x": 680,
+		"y": 120,
+		"wires": []
+	},
+	{
+		"id": "7c2def80.9949a",
+		"type": "comment",
+		"z": "a2638507.6235e8",
+		"name": "异步结果",
+		"info": "网页前端发送post请求时，会被分成两路处理，\n一路即时回应http响应，另一路提取相关信息，\n交给后台进行MBus操作，操作结果用WebSocket回发。\n",
+		"x": 480,
+		"y": 320,
+		"wires": []
+	},
+	{
+		"id": "8ff91b24.b99758",
+		"type": "websocket-listener",
+		"z": "",
+		"path": "/ws/mbusResult",
+		"wholemsg": "false"
+	}
+]
