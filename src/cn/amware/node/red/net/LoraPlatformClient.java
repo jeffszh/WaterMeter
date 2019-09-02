@@ -10,6 +10,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.TreeMap;
 
 public class LoraPlatformClient {
@@ -17,7 +19,7 @@ public class LoraPlatformClient {
 	private static final String SECRET = "3611fa";
 	private static final String PLATFORM_URL = "http://182.61.56.51:8096/api";
 
-	private static String generateAccessToken(TreeMap<String, String> params) {
+	private static String generateAccessToken(LinkedHashMap<String, String> params) {
 		StringBuilder sb = new StringBuilder();
 		for (String key : params.keySet()) {
 			if (sb.length() != 0) {
@@ -30,18 +32,20 @@ public class LoraPlatformClient {
 	}
 
 	public String createDevice(String devEui, String appKey, String timeStamp) {
-		TreeMap<String, String> params = new TreeMap<>();
-		params.put("dev_eui", devEui);
-		params.put("timestamp", timeStamp);
+		LinkedHashMap<String, String> allParams = new LinkedHashMap<>();
+		TreeMap<String, String> params = new TreeMap<>(Comparator.reverseOrder());
 		params.put("application_key", appKey);
-//		params.put("secret", SECRET);
-//		params.put("access_token", generateAccessToken(params));
-		params.put("access_token", SECRET);
-		String paramsStr = JSON.toJSONString(params);
+		params.put("dev_eui", devEui);
+		params.forEach(allParams::put);
+		allParams.put("timestamp", timeStamp);
+		allParams.put("secret", SECRET);
+		allParams.put("access_token", generateAccessToken(allParams));
+		allParams.remove("secret");
+		String paramsStr = JSON.toJSONString(allParams);
 		System.out.println(paramsStr);
 
 		try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-			HttpPost post = new HttpPost(PLATFORM_URL + "/devices");
+			HttpPost post = new HttpPost(PLATFORM_URL + "/create_device");
 			StringEntity entity = new StringEntity(paramsStr);
 			entity.setContentEncoding("UTF-8");
 			entity.setContentType("application/json");
