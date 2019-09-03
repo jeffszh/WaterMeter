@@ -26,9 +26,19 @@ public class Test {
 		System.out.println("ts1=" + ts1 + ", ts2=" + ts2);
 
 		LoraPlatformClient client = new LoraPlatformClient();
-		String result = client.createDevice("1234567812345678",
-				"12345678123456781234567812345678",
-				"1567050281");
+//		String result = client.createDevice("1234567812345678",
+//				"12345678123456781234567812345678",
+//				"1567050281");
+
+//		String txt = "AMZH";
+//		for (byte b : txt.getBytes()) {
+//			System.out.print(String.format("%02x", b));
+//		}
+//		System.out.println();
+
+		String result = client.createDevice("414D5A4812345678",
+				"414d5a48202020202020202020202020",
+				NetUtils.getTimeStamp());
 		System.out.println(result);
 	}
 

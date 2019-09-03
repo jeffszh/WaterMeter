@@ -1,7 +1,6 @@
 package cn.amware.node.red.net;
 
 import com.alibaba.fastjson.JSON;
-import javafx.util.Pair;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
