@@ -1,8 +1,10 @@
 package cn.amware.node.red;
 
+import cn.amware.node.red.mbus.Receiver;
 import cn.amware.node.red.mbus.Sender;
 import cn.jeffszh.lib.node.red.java.NodeRedNode;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
@@ -66,6 +68,10 @@ public class WaterMeterNode extends NodeRedNode {
 	}
 
 	private void processRx(String rxString) {
+		System.out.println("RX = " + rxString);
+		JSONObject rxObject = JSON.parseObject(rxString);
+		JSONArray ja = rxObject.getJSONArray("data");
+		new Receiver(ja).process();
 	}
 
 	@SuppressWarnings({"WeakerAccess", "unused"})

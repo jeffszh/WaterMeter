@@ -5,18 +5,18 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
-class Receiver {
+public class Receiver {
 
-	private byte[] data;
+	private int[] data;
 
-	Receiver(JSONArray dataArray) {
-		data = new byte[dataArray.size()];
+	public Receiver(JSONArray dataArray) {
+		data = new int[dataArray.size()];
 		for (int i = 0; i < dataArray.size(); i++) {
-			data[i] = (byte) dataArray.getInteger(i).intValue();
+			data[i] = dataArray.getInteger(i) & 0xFF;
 		}
 	}
 
-	void process() {
+	public void process() {
 		new Thread(this::_process).start();
 	}
 
@@ -36,7 +36,7 @@ class Receiver {
 
 		MeterPacket meterPacket = new MeterPacket();
 		try {
-			meterPacket.loadFromBytes(data);
+			meterPacket.loadFromBinary(data);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;

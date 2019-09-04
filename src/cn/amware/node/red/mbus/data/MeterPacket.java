@@ -1,60 +1,111 @@
 package cn.amware.node.red.mbus.data;
 
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.function.Consumer;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings({"WeakerAccess"})
 public class MeterPacket {
 
+	private static final int START_MARK = 0x68;
+	private static final int END_MARK = 0x16;
+	@SuppressWarnings("FieldCanBeLocal")
+	private static boolean usingActualLen = false;
+
 	private int actualDataLen;
-	private byte actualCheckSum;
+	private int actualCheckSum;
 
-	public byte startMark;
-	public byte instrumentType;
-	public byte[] address = new byte[7];
-	public byte ctrlCode;
-	public byte dataLen;
-	public byte[] data;
-	public byte checkSum;
-	public byte endMark;
+	public int startMark;
+	public int instrumentType;
+	public int[] address = new int[7];
+	public int ctrlCode;
+	public int dataLen;
+	public int[] data;
+	public int checkSum;
+	public int endMark;
 
-	public void loadFromBytes(byte[] bArr) throws Exception {
-		int start = searchStartMark(bArr);
-		int end = searchEndMark(bArr);
-		byte[] packetBytes = Arrays.copyOfRange(bArr, start, end + 1);
-		actualDataLen = packetBytes.length - 13;
-		actualCheckSum = 0;
-		for (int i = 0; i < packetBytes.length - 2; i++) {
-			actualCheckSum += packetBytes[i];
-		}
-
-		ByteInputStream inputStream = new ByteInputStream(packetBytes, packetBytes.length);
-		startMark = (byte) inputStream.read();
-		instrumentType = (byte) inputStream.read();
-		//noinspection ResultOfMethodCallIgnored
-		inputStream.read(address);
-		ctrlCode = (byte) inputStream.read();
-		dataLen = (byte) inputStream.read();
-		data = new byte[actualDataLen];
-		//noinspection ResultOfMethodCallIgnored
-		inputStream.read(data);
-		checkSum = (byte) inputStream.read();
-		endMark = (byte) inputStream.read();
+	public MeterPacket() {
 	}
 
-	private int searchStartMark(byte[] bArr) {
+	public MeterPacket(int[] address, int ctrlCode, int[] data) {
+		this(0x10, address, ctrlCode, data);
+	}
+
+	public MeterPacket(int instrumentType, int[] address, int ctrlCode, int[] data) {
+		if (address.length != 7) {
+			throw new RuntimeException("Address length must be 7!");
+		}
+		startMark = START_MARK;
+		this.instrumentType = instrumentType;
+		this.address = address;
+		this.ctrlCode = ctrlCode;
+		dataLen = (byte) data.length;
+		this.data = data;
+		checkSum = 0;
+		endMark = END_MARK;
+	}
+
+	public int[] createBinary() {
+		LinkedList<Integer> outList = new LinkedList<>();
+		Consumer<Integer> out = val -> {
+			checkSum = (checkSum + val) & 0xFF;
+			outList.add(val);
+		};
+		checkSum = 0;
+		out.accept(startMark);
+		out.accept(instrumentType);
+		Arrays.stream(address).forEachOrdered(out::accept);
+		out.accept(ctrlCode);
+		out.accept(dataLen);
+		Arrays.stream(data).forEachOrdered(out::accept);
+		outList.add(checkSum);
+		outList.add(endMark);
+		Integer[] result = outList.toArray(new Integer[0]);
+		return ArrayUtils.toPrimitive(result);
+	}
+
+	public void loadFromBinary(int[] binData) throws Exception {
+		int start = searchStartMark(binData);
+		int end = searchEndMark(binData);
+		int[] packetBinData = Arrays.copyOfRange(binData, start, end + 1);
+		LinkedList<Integer> input = new LinkedList<>(Arrays.asList(ArrayUtils.toObject(packetBinData)));
+
+		actualDataLen = packetBinData.length - 13;
+		actualCheckSum = 0;
+		for (int i = 0; i < packetBinData.length - 2; i++) {
+			actualCheckSum += packetBinData[i];
+		}
+		actualCheckSum &= 0xFF;
+
+		startMark = input.remove();
+		instrumentType = input.remove();
+		Arrays.setAll(address, i -> input.remove());
+		ctrlCode = input.remove();
+		dataLen = input.remove();
+		if (usingActualLen) {
+			data = new int[actualDataLen];
+		} else {
+			data = new int[dataLen];
+		}
+		Arrays.setAll(data, i -> input.remove());
+		checkSum = input.remove();
+		endMark = input.remove();
+	}
+
+	private int searchStartMark(int[] bArr) {
 		for (int i = 0; i < bArr.length; i++) {
-			if (bArr[i] == 0x68) {
+			if (bArr[i] == START_MARK) {
 				return i;
 			}
 		}
 		throw new IndexOutOfBoundsException("no start mark!");
 	}
 
-	private int searchEndMark(byte[] bArr) {
+	private int searchEndMark(int[] bArr) {
 		for (int i = bArr.length - 1; i >= 0; i--) {
-			if (bArr[i] == 0x16) {
+			if (bArr[i] == END_MARK) {
 				return i;
 			}
 		}
