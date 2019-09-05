@@ -4,9 +4,18 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
-@SuppressWarnings({"WeakerAccess"})
+/**
+ * <h1>水表数据包</h1>
+ * 用于生成和解析水表MBus协议的数据包。
+ * <nl>
+ *     <li>可生成二进制流，用于输出到水表——{@link #createBinary()}</li>
+ *     <li>可将从水表收到的二进制流，解析填入对象的各个字段——{@link #loadFromBinary(int[])}</li>
+ * </nl>
+ */
+@SuppressWarnings("WeakerAccess")
 public class MeterPacket {
 
 	private static final int START_MARK = 0x68;
@@ -47,6 +56,10 @@ public class MeterPacket {
 		endMark = END_MARK;
 	}
 
+	/**
+	 * 生成用于发送到水表的二进制流。
+	 * @return 用于发送到水表的二进制流
+	 */
 	public int[] createBinary() {
 		LinkedList<Integer> outList = new LinkedList<>();
 		Consumer<Integer> out = val -> {
@@ -66,6 +79,11 @@ public class MeterPacket {
 		return ArrayUtils.toPrimitive(result);
 	}
 
+	/**
+	 * 解析并装载二进制流。
+	 * @param binData 从水表收到的二进制流
+	 * @throws Exception 当数据未能正确解析
+	 */
 	public void loadFromBinary(int[] binData) throws Exception {
 		int start = searchStartMark(binData);
 		int end = searchEndMark(binData);
@@ -79,19 +97,23 @@ public class MeterPacket {
 		}
 		actualCheckSum &= 0xFF;
 
-		startMark = input.remove();
-		instrumentType = input.remove();
-		Arrays.setAll(address, i -> input.remove());
-		ctrlCode = input.remove();
-		dataLen = input.remove();
-		if (usingActualLen) {
-			data = new int[actualDataLen];
-		} else {
-			data = new int[dataLen];
+		try {
+			startMark = input.remove();
+			instrumentType = input.remove();
+			Arrays.setAll(address, i -> input.remove());
+			ctrlCode = input.remove();
+			dataLen = input.remove();
+			if (usingActualLen) {
+				data = new int[actualDataLen];
+			} else {
+				data = new int[dataLen];
+			}
+			Arrays.setAll(data, i -> input.remove());
+			checkSum = input.remove();
+			endMark = input.remove();
+		} catch (NoSuchElementException e) {
+			throw new Exception(e);
 		}
-		Arrays.setAll(data, i -> input.remove());
-		checkSum = input.remove();
-		endMark = input.remove();
 	}
 
 	private int searchStartMark(int[] bArr) {

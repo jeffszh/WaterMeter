@@ -1,5 +1,6 @@
 package cn.amware.node.red.mbus;
 
+import cn.amware.node.red.mbus.data.MeterData;
 import cn.amware.node.red.mbus.data.MeterPacket;
 import cn.jeffszh.lib.node.red.java.NodeRedNode;
 import com.alibaba.fastjson.JSON;
@@ -33,46 +34,6 @@ public class Sender {
 		new Thread(this::_send).start();
 	}
 
-//	private void _send() {
-//		try {
-//			Thread.sleep(500);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//
-//		//68 10 AA AA AA AA AA AA AA 01 03 EF 90 01 A2 16
-//		//68 10 AA AA AA AA AA AA AA 01 03 5F 90 02 13 16
-//		//68 10 AA AA AA AA AA AA AA 01 03 AF 90 03 64 16
-//		int[] bArr = {0x68, 0x10, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0x01, 0x03, 0xFF, 0xFF, 0x01, 0xFF, 0x16};
-//		for (int i = 0; i < address.length; i++) {
-//			bArr[i + 2] = address[i] & 0xFF;
-//		}
-//		bArr[9] = ctrlCode & 0xFF;
-//		bArr[10] = dataId.length + 1;
-//		bArr[11] = dataId[0] & 0xFF;
-//		bArr[12] = dataId[1] & 0xFF;
-//		bArr[13] = seq++;
-//		int sum = 0;
-//		for (int i = 0; i < bArr.length - 2; i++) {
-//			sum += bArr[i];
-//		}
-//		sum &= 0xFF;
-//		bArr[14] = sum;
-//
-//		JSONObject jo = new JSONObject();
-//		jo.put("topic", "TX");
-////		JSONArray ja = new JSONArray();
-////		for (int x : bArr) {
-////			ja.add(x);
-////		}
-////		jo.put("payload", ja);
-//		int[] outBuf = new int[bArr.length + 6];
-//		Arrays.fill(outBuf, 0xFE);
-//		System.arraycopy(bArr, 0, outBuf, 6, bArr.length);
-//		jo.put("payload", outBuf);
-//		node.writeOutput(jo);
-//	}
-
 	private void _send() {
 		try {
 			Thread.sleep(500);
@@ -80,11 +41,11 @@ public class Sender {
 			e.printStackTrace();
 		}
 
-		int[] data = new int[3];
-		data[0] = dataId[0] & 0xFF;
-		data[1] = dataId[1] & 0xFF;
-		data[2] = seq++;
-		MeterPacket packet = new MeterPacket(address, (byte) ctrlCode, data);
+		MeterData meterData = new MeterData();
+		meterData.dataId[0] = dataId[0] & 0xFF;
+		meterData.dataId[1] = dataId[1] & 0xFF;
+		meterData.seq = seq++;
+		MeterPacket packet = new MeterPacket(address, (byte) ctrlCode, meterData.toBinary());
 		int[] packetBinary = packet.createBinary();
 
 		JSONObject jo = new JSONObject();

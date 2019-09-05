@@ -9,6 +9,12 @@ public class Test {
 
 	public static void main(String[] args) {
 		new Test().run();
+//		MeterData meterData = new MeterData();
+//		meterData.dataId[0] = 0x57;
+//		meterData.dataId[1] = 0xD3;
+//		meterData.seq = 123;
+//		System.out.println(JSON.toJSONString(meterData, SerializerFeature.BrowserCompatible));
+//		System.out.println(JSON.toJSONString(meterData));
 	}
 
 	private void run() {

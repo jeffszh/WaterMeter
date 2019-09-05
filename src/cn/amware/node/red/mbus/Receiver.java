@@ -1,5 +1,6 @@
 package cn.amware.node.red.mbus;
 
+import cn.amware.node.red.mbus.data.MeterData;
 import cn.amware.node.red.mbus.data.MeterPacket;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -30,7 +31,7 @@ public class Receiver {
 		@SuppressWarnings("WeakerAccess")
 		class Result {
 			public String topic;
-			public String payload;
+			public Object payload;
 		}
 		Result result = new Result();
 
@@ -46,6 +47,24 @@ public class Receiver {
 		result.payload = meterPacket.toString();
 
 		String json = JSON.toJSONString(result, SerializerFeature.BrowserCompatible);
+		System.out.println(json);
+
+		MeterData meterData;
+		try {
+			meterData = MeterData.createFromBinary(meterPacket.data);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+
+		result.topic = "Result";
+		result.payload = meterData;
+
+		json = JSON.toJSONString(result, SerializerFeature.BrowserCompatible);
+		System.out.println(json);
+
+		result.topic = "WebResult";
+		json = JSON.toJSONString(result, SerializerFeature.BrowserCompatible);
 		System.out.println(json);
 	}
 

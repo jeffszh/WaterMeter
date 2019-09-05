@@ -69,13 +69,6 @@
 		"responsetimeout": "10000"
 	},
 	{
-		"id": "c35f8949.621d58",
-		"type": "tab",
-		"label": "MBus主流程",
-		"disabled": false,
-		"info": ""
-	},
-	{
 		"id": "90c286bb.dbc918",
 		"type": "jar-func",
 		"z": "c35f8949.621d58",
@@ -135,13 +128,18 @@
 			},
 			{
 				"t": "eq",
+				"v": "Result",
+				"vt": "str"
+			},
+			{
+				"t": "eq",
 				"v": "WebResult",
 				"vt": "str"
 			}
 		],
 		"checkall": "true",
 		"repair": false,
-		"outputs": 5,
+		"outputs": 6,
 		"x": 450,
 		"y": 320,
 		"wires": [
@@ -156,6 +154,9 @@
 			],
 			[
 				"4d07825f.25dc9c"
+			],
+			[
+				"1a3415bf.2051ca"
 			],
 			[
 				"7bea76a3.d94778"
@@ -392,7 +393,7 @@
 				"t": "set",
 				"p": "payload.dataId",
 				"pt": "msg",
-				"to": "5F 90   ",
+				"to": "5F 90",
 				"tot": "str"
 			}
 		],
@@ -550,5 +551,40 @@
 		"y": 420,
 		"wires": [],
 		"l": true
+	},
+	{
+		"id": "d7786f3a.96fb2",
+		"type": "inject",
+		"z": "c35f8949.621d58",
+		"name": "手动触发",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 100,
+		"y": 320,
+		"wires": [
+			[
+				"f3129b95.754858"
+			]
+		]
+	},
+	{
+		"id": "1a3415bf.2051ca",
+		"type": "debug",
+		"z": "c35f8949.621d58",
+		"name": "",
+		"active": true,
+		"tosidebar": true,
+		"console": true,
+		"tostatus": true,
+		"complete": "payload",
+		"targetType": "msg",
+		"x": 260,
+		"y": 420,
+		"wires": []
 	}
 ]
