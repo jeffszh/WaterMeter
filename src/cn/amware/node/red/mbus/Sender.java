@@ -1,5 +1,6 @@
 package cn.amware.node.red.mbus;
 
+import cn.amware.node.red.mbus.data.DataUtils;
 import cn.amware.node.red.mbus.data.MeterData;
 import cn.amware.node.red.mbus.data.MeterPacket;
 import cn.jeffszh.lib.node.red.java.NodeRedNode;
@@ -7,9 +8,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class Sender {
 
@@ -22,9 +21,9 @@ public class Sender {
 	public Sender(String cmd, NodeRedNode node) throws Exception {
 		this.node = node;
 		CommandParam commandParam = JSON.parseObject(cmd, CommandParam.class);
-		address = hexStringToArray(commandParam.address);
+		address = DataUtils.hexStrToArray(commandParam.address);
 		ctrlCode = Integer.parseInt(commandParam.ctrlCode, 16);
-		dataId = hexStringToArray(commandParam.dataId);
+		dataId = DataUtils.hexStrToArray(commandParam.dataId);
 		if (address.length != 7 || dataId.length != 2) {
 			throw new IOException("MBus command param error!");
 		}
@@ -55,15 +54,6 @@ public class Sender {
 		System.arraycopy(packetBinary, 0, outBuf, 6, packetBinary.length);
 		jo.put("payload", outBuf);
 		node.writeOutput(jo);
-	}
-
-	private int[] hexStringToArray(String hexString) {
-		ArrayList<Integer> result = new ArrayList<>();
-		Scanner scanner = new Scanner(hexString);
-		while (scanner.hasNext()) {
-			result.add(scanner.nextInt(16));
-		}
-		return result.stream().mapToInt(Integer::intValue).toArray();
 	}
 
 	@SuppressWarnings("WeakerAccess")
