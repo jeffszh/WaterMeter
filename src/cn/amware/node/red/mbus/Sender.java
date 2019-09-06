@@ -16,6 +16,7 @@ public class Sender {
 	private final int[] address;
 	private final int ctrlCode;
 	private final int[] dataId;
+	private final JSONObject data;
 	private static byte seq = 1;
 
 	public Sender(String cmd, NodeRedNode node) throws Exception {
@@ -24,6 +25,7 @@ public class Sender {
 		address = DataUtils.hexStrToArray(commandParam.address);
 		ctrlCode = Integer.parseInt(commandParam.ctrlCode, 16);
 		dataId = DataUtils.hexStrToArray(commandParam.dataId);
+		data = commandParam.data;
 		if (address.length != 7 || dataId.length != 2) {
 			throw new IOException("MBus command param error!");
 		}
@@ -43,7 +45,29 @@ public class Sender {
 		MeterData meterData = new MeterData();
 		meterData.dataId[0] = dataId[0] & 0xFF;
 		meterData.dataId[1] = dataId[1] & 0xFF;
+		switch (ctrlCode & 0x07) {
+			case 0x01:	// 读命令
+				// do nothing
+				break;
+			case 0x04:	// 写命令
+				meterData = MeterData.createByTag(meterData.getDataTag());
+				if (meterData == null) {
+					return;
+				}
+				meterData.dataId[0] = dataId[0] & 0xFF;
+				meterData.dataId[1] = dataId[1] & 0xFF;
+				try {
+					meterData.loadFromJsonObject(data);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return;
+				}
+				break;
+			default:
+				return;
+		}
 		meterData.seq = seq++;
+
 		MeterPacket packet = new MeterPacket(address, (byte) ctrlCode, meterData.toBinary());
 		int[] packetBinary = packet.createBinary();
 
@@ -61,6 +85,7 @@ public class Sender {
 		public String address;
 		public String ctrlCode;
 		public String dataId;
+		public JSONObject data;
 	}
 
 }

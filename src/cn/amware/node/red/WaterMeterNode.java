@@ -2,11 +2,12 @@ package cn.amware.node.red;
 
 import cn.amware.node.red.mbus.Receiver;
 import cn.amware.node.red.mbus.Sender;
+import cn.amware.node.red.net.LoraPlatformClient;
+import cn.amware.node.red.net.NetUtils;
 import cn.jeffszh.lib.node.red.java.NodeRedNode;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 
 public class WaterMeterNode extends NodeRedNode {
 
@@ -38,17 +39,67 @@ public class WaterMeterNode extends NodeRedNode {
 				case "RX":
 					processRx(payload);
 					return;
+//				case "WebRequest":
+//					@SuppressWarnings({"WeakerAccess", "unused"})
+//					class WebResult {
+//						public String topic = "WebResult";
+//						public Object payload;
+//					}
+//					WebResult webResult = new WebResult();
+//					String jsonStr = JSON.toJSONString(jsonObject, SerializerFeature.BrowserCompatible);
+//					System.out.println("jsonObject = " + jsonStr);
+//					webResult.payload = "输入的请求为：" + jsonStr;
+//					writeOutput(webResult);
+//					return;
 				case "WebRequest":
-					@SuppressWarnings({"WeakerAccess", "unused"})
-					class WebResult {
-						public String topic = "WebResult";
-						public Object payload;
+					String reqUrl = jsonObject.getString("url");
+					if (reqUrl.endsWith("readLoraParam")) {
+						processCommand(payload);
+					} else if (reqUrl.endsWith("writeLoraParam")) {
+						String devEui = jsonObject.getJSONObject("payload")
+								.getJSONObject("data").getString("devEui").trim().toLowerCase();
+						String appKey = jsonObject.getJSONObject("payload")
+								.getJSONObject("data").getString("appKey").trim().toLowerCase();
+						new Thread(()->{
+							LoraPlatformClient client = new LoraPlatformClient();
+							String result = client.createDevice(
+									NetUtils.noSpaceHexStr(devEui),
+									NetUtils.noSpaceHexStr(appKey),
+									NetUtils.getTimeStamp());
+							@SuppressWarnings({"WeakerAccess", "unused"})
+							class WebResult {
+								public String topic = "WebResult";
+								public Object payload;
+							}
+							WebResult webResult = new WebResult();
+							JSONObject resultObj = JSON.parseObject(result);
+							webResult.payload = resultObj;
+							writeOutput(webResult);
+							if (resultObj.getInteger("code") == 200) {
+								processCommand(payload);
+							}
+						}).start();
+
+//						if ("auto".equals(inputAppKey)) {
+//							String devEui = jsonObject.getJSONObject("payload")
+//									.getJSONObject("data").getString("devEui").trim().toLowerCase();
+//							String appEui = jsonObject.getJSONObject("payload")
+//									.getJSONObject("data").getString("appEui").trim().toLowerCase();
+//							//System.out.println("devEui=" + devEui);
+//							//System.out.println("appEui=" + appEui);
+//							new Thread(()->{
+//								LoraPlatformClient client = new LoraPlatformClient();
+//								String result = client.createDevice(devEui, appEui,
+//										NetUtils.getTimeStamp());
+//								jsonObject.getJSONObject("payload")
+//										.getJSONObject("data").put("appKey",
+//										"1D A6 AE E7 D4 12 83 CA AF 70 90 1B 68 D0 2E BC");
+//								processCommand(jsonObject.get("payload").toString());
+//							}).start();
+//						} else {
+//							processCommand(payload);
+//						}
 					}
-					WebResult webResult = new WebResult();
-					String jsonStr = JSON.toJSONString(jsonObject, SerializerFeature.BrowserCompatible);
-					System.out.println("jsonObject = " + jsonStr);
-					webResult.payload = "输入的请求为：" + jsonStr;
-					writeOutput(webResult);
 					return;
 			}
 		}

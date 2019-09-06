@@ -1,9 +1,8 @@
 package cn.amware.node.red.mbus.data;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -58,6 +57,33 @@ public class MeterLoraParamsData extends MeterData {
 		devEui = DataUtils.reverseArray(devEui);
 		appEui = DataUtils.reverseArray(appEui);
 		appKey = DataUtils.reverseArray(appKey);
+	}
+
+	@Override
+	public int[] toBinary() {
+		int[] dataHead = super.toBinary();
+		Queue<Integer> outputQueue = new LinkedList<>();
+		outputQueue.addAll(Arrays.asList(ArrayUtils.toObject(dataHead)));
+		outputQueue.addAll(Arrays.asList(ArrayUtils.toObject(DataUtils.reverseArray(devEui))));
+		outputQueue.addAll(Arrays.asList(ArrayUtils.toObject(DataUtils.reverseArray(appEui))));
+		outputQueue.addAll(Arrays.asList(ArrayUtils.toObject(DataUtils.reverseArray(appKey))));
+
+		return ArrayUtils.toPrimitive(outputQueue.toArray(new Integer[0]));
+	}
+
+	private static int[] checkAndReadParam(String key, JSONObject jo) throws Exception {
+		String str = jo.getString(key);
+		if (str == null || str.isEmpty()) {
+			throw new Exception(String.format("param \"%s\" is not present.", key));
+		}
+		return DataUtils.hexStrToArray(str);
+	}
+
+	@Override
+	public void loadFromJsonObject(JSONObject jo) throws Exception {
+		devEui = checkAndReadParam("devEui", jo);
+		appEui = checkAndReadParam("appEui", jo);
+		appKey = checkAndReadParam("appKey", jo);
 	}
 
 }

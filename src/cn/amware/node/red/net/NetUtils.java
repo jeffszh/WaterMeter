@@ -34,4 +34,19 @@ public class NetUtils {
 		}
 	}
 
+	/**
+	 * 去掉16进制字符串中间的空格。
+	 * @param hexStr 原始的带空格的16进制字符串
+	 * @return 紧排的没有空格的16进制字符串
+	 */
+	public static String noSpaceHexStr(String hexStr) {
+		StringBuilder sb = new StringBuilder();
+		for (char c : hexStr.toCharArray()) {
+			if (c != ' ') {
+				sb.append(c);
+			}
+		}
+		return sb.toString();
+	}
+
 }

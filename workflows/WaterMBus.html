@@ -40,6 +40,34 @@
 			ajaxPost(params, "http://localhost:1880/writeMeterId");
 		}
 
+		function readLoraParam() {
+			var params = {};
+			params.address = document.forms["form02"]["address"].value;
+			params.ctrlCode = document.forms["form02"]["ctrlCode"].value;
+			params.dataId = document.forms["form02"]["dataId"].value;
+			ajaxPost(params, "http://localhost:1880/readLoraParam");
+		}
+
+		function writeLoraParam() {
+			var params = {};
+			params.address = document.forms["form04"]["address"].value;
+			params.ctrlCode = document.forms["form04"]["ctrlCode"].value;
+			params.dataId = document.forms["form04"]["dataId"].value;
+			params.data = {};
+			params.data.devEui = document.forms["form04"]["devEui"].value;
+			params.data.appEui = document.forms["form04"]["appEui"].value;
+			params.data.appKey = document.forms["form04"]["appKey"].value;
+			ajaxPost(params, "http://localhost:1880/writeLoraParam");
+		}
+
+		function readOtherParam() {
+			var params = {};
+			params.address = document.forms["form03"]["address"].value;
+			params.ctrlCode = document.forms["form03"]["ctrlCode"].value;
+			params.dataId = document.forms["form03"]["dataId"].value;
+			ajaxPost(params, "http://localhost:1880/readLoraParam");
+		}
+
 		function openWebSock() {
 			var ws = new WebSocket("ws://localhost:1880/ws/mbusResult");
 			ws.onopen = function() {
@@ -66,7 +94,41 @@
 <body>
 <form name="form01">
 	水表编号：<input name="meterId" type="text">
-	<input type="button" value="写入" onclick="writeMeterId();">
+	<input type="button" value="试试用ajax提交表单" onclick="writeMeterId();">
+</form>
+<hr>
+<table border="1" cellpadding="20">
+	<tr>
+		<td>
+			<form name="form02">
+				<p><b>读Lora参数</b></p>
+				地址：<input name="address" type="text" value="AA AA AA AA AA AA AA"><br>
+				<input name="ctrlCode" type="hidden" value="21">
+				<input name="dataId" type="hidden" value="1E C7">
+				<input type="button" value="读Lora参数" onclick="readLoraParam();">
+			</form>
+		</td>
+		<td>
+			<form name="form04">
+				<p><b>写Lora参数</b></p>
+				地址：<input name="address" type="text" value="AA AA AA AA AA AA AA"><br>
+				<input name="ctrlCode" type="hidden" value="24">
+				<input name="dataId" type="hidden" value="1E C7">
+				dev_eui: <input name="devEui" type="text" value="41 4D 5A 48 00 00 00 01" size="30"><br>
+				app_eui: <input name="appEui" type="text" value="F2 DD F9 51 C7 00 00 00" size="30"><br>
+				app_key: <input name="appKey" type="text" value="1D A6 AE E7 D4 12 83 CA AF 70 90 1B 68 D0 2E BC" size="50"><br>
+				<input type="button" value="写Lora参数" onclick="writeLoraParam();">
+			</form>
+		</td>
+	</tr>
+</table>
+<hr>
+<form name="form03">
+	<p><b>读其他参数</b></p>
+	地址：<input name="address" type="text" value="AA AA AA AA AA AA AA"><br>
+	<input name="ctrlCode" type="text" value="21"><br>
+	<input name="dataId" type="text" value="D3 57"><br>
+	<input type="button" value="读其他参数" onclick="readOtherParam();">
 </form>
 <hr>
 <p id="resultPanel">空</p>

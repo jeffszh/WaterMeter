@@ -547,8 +547,8 @@
 		"links": [
 			"27da460.28e77ba"
 		],
-		"x": 475,
-		"y": 420,
+		"x": 530,
+		"y": 440,
 		"wires": [],
 		"l": true
 	},
@@ -583,8 +583,165 @@
 		"tostatus": true,
 		"complete": "payload",
 		"targetType": "msg",
-		"x": 260,
-		"y": 420,
+		"x": 320,
+		"y": 440,
 		"wires": []
+	},
+	{
+		"id": "a0755bfe.d82cd8",
+		"type": "change",
+		"z": "c35f8949.621d58",
+		"name": "读Lora参数",
+		"rules": [
+			{
+				"t": "set",
+				"p": "payload",
+				"pt": "msg",
+				"to": "{}",
+				"tot": "json"
+			},
+			{
+				"t": "set",
+				"p": "payload.address",
+				"pt": "msg",
+				"to": "AA AA AA AA AA AA AA ",
+				"tot": "str"
+			},
+			{
+				"t": "set",
+				"p": "payload.ctrlCode",
+				"pt": "msg",
+				"to": "21",
+				"tot": "str"
+			},
+			{
+				"t": "set",
+				"p": "payload.dataId",
+				"pt": "msg",
+				"to": "1e c7",
+				"tot": "str"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 270,
+		"y": 320,
+		"wires": [
+			[
+				"f92b4b55.73af48"
+			]
+		]
+	},
+	{
+		"id": "c1d6c80a.ecbff8",
+		"type": "inject",
+		"z": "c35f8949.621d58",
+		"name": "手动触发",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 100,
+		"y": 360,
+		"wires": [
+			[
+				"a0755bfe.d82cd8"
+			]
+		]
+	},
+	{
+		"id": "86697ba.b1d2588",
+		"type": "change",
+		"z": "c35f8949.621d58",
+		"name": "写Lora参数",
+		"rules": [
+			{
+				"t": "set",
+				"p": "payload",
+				"pt": "msg",
+				"to": "{}",
+				"tot": "json"
+			},
+			{
+				"t": "set",
+				"p": "payload.address",
+				"pt": "msg",
+				"to": "AA AA AA AA AA AA AA ",
+				"tot": "str"
+			},
+			{
+				"t": "set",
+				"p": "payload.ctrlCode",
+				"pt": "msg",
+				"to": "24",
+				"tot": "str"
+			},
+			{
+				"t": "set",
+				"p": "payload.dataId",
+				"pt": "msg",
+				"to": "1e c7",
+				"tot": "str"
+			},
+			{
+				"t": "set",
+				"p": "payload.data.devEui",
+				"pt": "msg",
+				"to": "41 4D 5A 48 00 00 00 01",
+				"tot": "str"
+			},
+			{
+				"t": "set",
+				"p": "payload.data.appEui",
+				"pt": "msg",
+				"to": "F2 DD F9 51 C7 00 00 00",
+				"tot": "str"
+			},
+			{
+				"t": "set",
+				"p": "payload.data.appKey",
+				"pt": "msg",
+				"to": "1D A6 AE E7 D4 12 83 CA AF 70 90 1B 68 D0 2E BC",
+				"tot": "str"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 270,
+		"y": 360,
+		"wires": [
+			[
+				"f92b4b55.73af48"
+			]
+		]
+	},
+	{
+		"id": "ce5e6a57.e66f48",
+		"type": "inject",
+		"z": "c35f8949.621d58",
+		"name": "手动触发",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 100,
+		"y": 400,
+		"wires": [
+			[
+				"86697ba.b1d2588"
+			]
+		]
 	}
 ]

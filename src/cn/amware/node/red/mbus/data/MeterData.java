@@ -1,5 +1,7 @@
 package cn.amware.node.red.mbus.data;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.Arrays;
 
 /**
@@ -41,6 +43,10 @@ public class MeterData {
 		seq = binData[2];
 	}
 
+	public void loadFromJsonObject(JSONObject jo) throws Exception {
+		// 在子类中实现
+	}
+
 	public static MeterData createFromBinary(int[] binData) throws Exception {
 		MeterData meterData = new MeterData();
 		meterData.loadFromBinary(binData);
@@ -48,12 +54,26 @@ public class MeterData {
 			return meterData;
 		}
 
-		MeterDataType meterDataType = MeterDataType.getByTag(meterData.getDataTag());
-		if (meterDataType != null) {
-			meterData = meterDataType.creator.create();	// 创建子类
-			meterData.loadFromBinary(binData);	// 调用子类的方法
+		MeterData detailMeterData = createByTag(meterData.getDataTag());	// 创建子类
+		if (detailMeterData != null) {
+			detailMeterData.loadFromBinary(binData);	// 调用子类的方法
+			return detailMeterData;
+		} else {
+			return meterData;
 		}
-		return meterData;
+	}
+
+	/**
+	 * 根据tag创建子类。
+	 * @param tag 字符串形式的数据标识。
+	 * @return 若找到tag对应的子类，返回该子类的示例，否则返回null。
+	 */
+	public static MeterData createByTag(String tag) {
+		MeterDataType meterDataType = MeterDataType.getByTag(tag);
+		if (meterDataType != null) {
+			return meterDataType.creator.create();
+		}
+		return null;
 	}
 
 	public static class MeterDataException extends Exception {
