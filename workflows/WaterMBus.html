@@ -5,30 +5,29 @@
 	<title>水表MBus测试</title>
 	<script src="https://cdn.staticfile.org/jquery/1.8.3/jquery.min.js"></script>
 	<script type="text/javascript">
-        function setResult(txt)
-        {
-        	var pnl = document.getElementById("resultPanel");
-        	pnl.innerHTML = txt;
-        }
+		function setResult(txt) {
+			var pnl = document.getElementById("resultPanel");
+			pnl.innerHTML = txt;
+		}
 
-        function testAjx()
-        {
-        	$("#resultPanel").html("这样吧");
-        }
+		function testAjx() {
+			$("#resultPanel").html("这样吧");
+		}
 
 		function ajaxPost(params, url) {
+			$("#msgPanel").html("---------------------");
 			$.ajax({
 				type: "POST",
 				url: url,
 				data: params,
 				dataType: "text",
-				beforeSend: function(XMLHttpRequest) {
+				beforeSend: function (XMLHttpRequest) {
 					setResult("正在调用node-red，请稍候……");
 				},
-				success: function(msg) {
+				success: function (msg) {
 					setResult(msg);
 				},
-				error: function(obj, msg, e) {
+				error: function (obj, msg, e) {
 					setResult("调用出错：" + msg + " - " + e);
 				}
 			});
@@ -55,8 +54,6 @@
 			params.dataId = document.forms["form04"]["dataId"].value;
 			params.data = {};
 			params.data.devEui = document.forms["form04"]["devEui"].value;
-			params.data.appEui = document.forms["form04"]["appEui"].value;
-			params.data.appKey = document.forms["form04"]["appKey"].value;
 			ajaxPost(params, "http://localhost:1880/writeLoraParam");
 		}
 
@@ -70,18 +67,19 @@
 
 		function openWebSock() {
 			var ws = new WebSocket("ws://localhost:1880/ws/mbusResult");
-			ws.onopen = function() {
+			ws.onopen = function () {
 				$("#wsStatus").html("在线");
 				$("#msgPanel").html("-");
 			}
-			ws.onclose = function() {
+			ws.onclose = function () {
 				$("#wsStatus").html("离线");
 				$("#msgPanel").html("X");
 			}
-			ws.onmessage = function(e) {
-				$("#msgPanel").html(e.data);
+			ws.onmessage = function (e) {
+				document.getElementById("msgPanel").innerHTML += "\n" + e.data;
+				// $("#msgPanel").html(e.data);
 			}
-			ws.onerror = function() {
+			ws.onerror = function () {
 				$("#wsStatus").html("出错");
 				$("#msgPanel").html("ERR");
 			}
@@ -115,8 +113,6 @@
 				<input name="ctrlCode" type="hidden" value="24">
 				<input name="dataId" type="hidden" value="1E C7">
 				dev_eui: <input name="devEui" type="text" value="41 4D 5A 48 00 00 00 01" size="30"><br>
-				app_eui: <input name="appEui" type="text" value="F2 DD F9 51 C7 00 00 00" size="30"><br>
-				app_key: <input name="appKey" type="text" value="1D A6 AE E7 D4 12 83 CA AF 70 90 1B 68 D0 2E BC" size="50"><br>
 				<input type="button" value="写Lora参数" onclick="writeLoraParam();">
 			</form>
 		</td>

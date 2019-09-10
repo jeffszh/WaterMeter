@@ -30,10 +30,9 @@ public class LoraPlatformClient {
 		return NetUtils.makeMd5(sb.toString());
 	}
 
-	public String createDevice(String devEui, String appKey, String timeStamp) {
+	public String createDevice(String devEui, String timeStamp) {
 		LinkedHashMap<String, String> allParams = new LinkedHashMap<>();
 		TreeMap<String, String> params = new TreeMap<>(Comparator.reverseOrder());
-		params.put("application_key", appKey);
 		params.put("dev_eui", devEui);
 		params.forEach(allParams::put);
 		allParams.put("timestamp", timeStamp);

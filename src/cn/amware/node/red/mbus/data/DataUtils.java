@@ -1,7 +1,6 @@
 package cn.amware.node.red.mbus.data;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class DataUtils {
@@ -31,6 +30,18 @@ public class DataUtils {
 	}
 
 	public static int[] hexStrToArray(String hexString) {
+		if (!hexString.trim().contains(" ")) {
+			// 若字符串是紧缩无空格的，先每隔两个字符加插一个空格。
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0, n = 0; i < hexString.length(); i++, n++) {
+				if (n >= 2) {
+					n = 0;
+					sb.append(' ');
+				}
+				sb.append(hexString.charAt(i));
+			}
+			hexString = sb.toString();
+		}
 		ArrayList<Integer> result = new ArrayList<>();
 		Scanner scanner = new Scanner(hexString);
 		while (scanner.hasNext()) {

@@ -58,13 +58,10 @@ public class WaterMeterNode extends NodeRedNode {
 					} else if (reqUrl.endsWith("writeLoraParam")) {
 						String devEui = jsonObject.getJSONObject("payload")
 								.getJSONObject("data").getString("devEui").trim().toLowerCase();
-						String appKey = jsonObject.getJSONObject("payload")
-								.getJSONObject("data").getString("appKey").trim().toLowerCase();
 						new Thread(()->{
 							LoraPlatformClient client = new LoraPlatformClient();
 							String result = client.createDevice(
 									NetUtils.noSpaceHexStr(devEui),
-									NetUtils.noSpaceHexStr(appKey),
 									NetUtils.getTimeStamp());
 							@SuppressWarnings({"WeakerAccess", "unused"})
 							class WebResult {
@@ -76,7 +73,17 @@ public class WaterMeterNode extends NodeRedNode {
 							webResult.payload = resultObj;
 							writeOutput(webResult);
 							if (resultObj.getInteger("code") == 200) {
-								processCommand(payload);
+								String dev_eui = resultObj.getString("dev_eui").trim().toLowerCase();
+								if (!NetUtils.noSpaceHexStr(devEui).equals(dev_eui)) {
+									new Exception("dev_eui is different: " + dev_eui + " != " + devEui)
+											.printStackTrace();
+									return;
+								}
+								String appKey = resultObj.getString("application_key");
+								String appEui = resultObj.getString("application_eui");
+								jsonObject.getJSONObject("payload").getJSONObject("data").put("appKey", appKey);
+								jsonObject.getJSONObject("payload").getJSONObject("data").put("appEui", appEui);
+								processCommand(jsonObject.get("payload").toString());
 							}
 						}).start();
 

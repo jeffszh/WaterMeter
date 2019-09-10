@@ -69,6 +69,12 @@ public class Test {
 	}
 
 	public static void main(String[] args) {
+//		int[] ints = DataUtils.hexStrToArray("abcdef9");
+//		for (int i : ints) {
+//			System.out.println(String.format("%02X", i));
+//		}
+//		System.out.println(DataUtils.arrayToHexStr(ints));
+
 		new Test().run();
 
 //		MeterData meterData = new MeterData();
@@ -125,7 +131,6 @@ public class Test {
 //		System.out.println();
 
 		String result = client.createDevice("414D5A4812345678",
-				"414d5a48202020202020202020202020",
 				NetUtils.getTimeStamp());
 		System.out.println(result);
 	}
