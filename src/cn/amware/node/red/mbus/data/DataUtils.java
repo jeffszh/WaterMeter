@@ -21,7 +21,7 @@ public class DataUtils {
 		return sum;
 	}
 
-	static String arrayToHexStr(int[] ints) {
+	public static String arrayToHexStr(int[] ints) {
 		StringBuilder result = new StringBuilder();
 		for (int i : ints) {
 			result.append(String.format("%02X ", i));
