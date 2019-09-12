@@ -50,7 +50,7 @@ public class DataUtils {
 		return result.stream().mapToInt(Integer::intValue).toArray();
 	}
 
-	static int[] reverseArray(int[] ints) {
+	public static int[] reverseArray(int[] ints) {
 		int[] result = new int[ints.length];
 		IntStream.range(0, ints.length).forEachOrdered(i -> result[result.length - i - 1] = ints[i]);
 		return result;

@@ -1,5 +1,7 @@
 package cn.amware.node.red.mbus.data;
 
+import cn.amware.node.red.mbus.data.hex.HexData2;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.Arrays;
@@ -13,7 +15,7 @@ import java.util.Arrays;
 @SuppressWarnings("WeakerAccess")
 public class MeterData {
 
-	public int[] dataId = new int[2];
+	public HexData2 dataId = new HexData2();
 	public int seq;
 
 	/**
@@ -21,11 +23,14 @@ public class MeterData {
 	 * @return 数据标识
 	 */
 	public String getDataTag() {
-		return String.format("%02X%02X", dataId[0], dataId[1]);
+		return dataId.getAsPackedHex().toUpperCase();
 	}
 
 	public int[] toBinary() {
-		return new int[]{dataId[0], dataId[1], seq};
+		IntQueue queue = new IntQueue();
+		queue.write(dataId.ints);
+		queue.write(seq);
+		return queue.getAll();
 	}
 
 	/**
@@ -38,13 +43,9 @@ public class MeterData {
 		if (binData.length < 3) {
 			throw new MeterDataException("binData.length = " + binData.length + ", it must >=3.");
 		}
-		dataId[0] = binData[0];
-		dataId[1] = binData[1];
-		seq = binData[2];
-	}
-
-	public void loadFromJsonObject(JSONObject jo) throws Exception {
-		// 在子类中实现
+		IntQueue queue = new IntQueue(binData);
+		queue.read(dataId.ints);
+		seq = queue.read();
 	}
 
 	public static MeterData createFromBinary(int[] binData) throws Exception {
@@ -71,7 +72,25 @@ public class MeterData {
 	public static MeterData createByTag(String tag) {
 		MeterDataType meterDataType = MeterDataType.getByTag(tag);
 		if (meterDataType != null) {
-			return meterDataType.creator.create();
+			try {
+				return meterDataType.clazz.newInstance();
+			} catch (InstantiationException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 根据tag创建子类，同时将json的内容填入子类中。
+	 * @param tag 字符串形式的数据标识。
+	 * @param jo json格式的子类的具体内容。
+	 * @return 返回具体的子类，并已填好内容，若出错，返回null。
+	 */
+	public static MeterData createByTagAndJson(String tag, JSONObject jo) {
+		MeterDataType meterDataType = MeterDataType.getByTag(tag);
+		if (meterDataType != null) {
+			return JSON.parseObject(jo.toJSONString(), meterDataType.clazz);
 		}
 		return null;
 	}
@@ -82,26 +101,27 @@ public class MeterData {
 		}
 	}
 
-	private interface MeterDataCreator {
-		MeterData create();
-	}
-
 	private enum MeterDataType {
-		METER_PARAM(	"D357",		MeterParamsData::new),
-		LORA_PARAM(		"1EC7",		MeterLoraParamsData::new),
+		METER_PARAM(	"D357",		MeterParamsData.class),
+		LORA_PARAM(		"1EC7",		MeterLoraParamsData.class),
 		;
 
 		private final String tag;
-		private final MeterDataCreator creator;
+		private final Class<? extends MeterData> clazz;
 
-		MeterDataType(String tag, MeterDataCreator creator) {
+		MeterDataType(String tag, Class<? extends MeterData> clazz) {
 			this.tag = tag;
-			this.creator = creator;
+			this.clazz = clazz;
 		}
 
 		public static MeterDataType getByTag(String tag) {
 			return Arrays.stream(values()).filter(value -> value.tag.equals(tag)).findFirst().orElse(null);
 		}
+	}
+
+	protected static void reverseArrayElements(int[] arr) {
+		System.arraycopy(DataUtils.reverseArray(arr), 0,
+				arr, 0, arr.length);
 	}
 
 }

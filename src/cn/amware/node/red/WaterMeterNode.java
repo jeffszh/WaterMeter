@@ -2,12 +2,17 @@ package cn.amware.node.red;
 
 import cn.amware.node.red.mbus.Receiver;
 import cn.amware.node.red.mbus.Sender;
+import cn.amware.node.red.mbus.data.MeterData;
+import cn.amware.node.red.mbus.data.MeterLoraParamsData;
+import cn.amware.node.red.mbus.data.MeterParamsData;
 import cn.amware.node.red.net.LoraPlatformClient;
 import cn.amware.node.red.net.NetUtils;
 import cn.jeffszh.lib.node.red.java.NodeRedNode;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.parser.deserializer.JavaBeanDeserializer;
 
 public class WaterMeterNode extends NodeRedNode {
 
@@ -15,10 +20,19 @@ public class WaterMeterNode extends NodeRedNode {
 		new WaterMeterNode().run();
 	}
 
+	private static void setupJsonSupport(Class<? extends MeterData> clazz) {
+		ParserConfig config = ParserConfig.getGlobalInstance();
+		config.putDeserializer(clazz, new JavaBeanDeserializer(config, clazz));
+	}
+
 	@Override
 	protected void onStart() {
 		super.onStart();
 		System.out.println("WaterMeterNode started.");
+
+		setupJsonSupport(MeterData.class);
+		setupJsonSupport(MeterLoraParamsData.class);
+		setupJsonSupport(MeterParamsData.class);
 	}
 
 	@Override

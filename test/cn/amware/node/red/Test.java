@@ -91,12 +91,12 @@ public class Test {
 //
 //			@Override
 //			public String toString() {
-//				return "hexData1=" + hexData1.data + ", hexData2=" + hexData2.data;
+//				return "hexData1=" + hexData1.ints + ", hexData2=" + hexData2.ints;
 //			}
 //		}
 //		MyClass obj = new MyClass();
-//		obj.hexData1.data = "yes";
-//		obj.hexData2.data = "no";
+//		obj.hexData1.ints = "yes";
+//		obj.hexData2.ints = "no";
 //		String jsonStr = JSON.toJSONString(obj, new MyFilter());
 //		System.out.println(jsonStr);
 //		System.out.println(JSON.toJSONString(obj));

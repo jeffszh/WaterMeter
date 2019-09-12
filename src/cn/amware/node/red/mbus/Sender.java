@@ -3,6 +3,7 @@ package cn.amware.node.red.mbus;
 import cn.amware.node.red.mbus.data.DataUtils;
 import cn.amware.node.red.mbus.data.MeterData;
 import cn.amware.node.red.mbus.data.MeterPacket;
+import cn.amware.node.red.net.NetUtils;
 import cn.jeffszh.lib.node.red.java.NodeRedNode;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -42,26 +43,21 @@ public class Sender {
 			e.printStackTrace();
 		}
 
-		MeterData meterData = new MeterData();
-		meterData.dataId[0] = dataId[0] & 0xFF;
-		meterData.dataId[1] = dataId[1] & 0xFF;
+		MeterData meterData;
 		switch (ctrlCode & 0x07) {
 			case 0x01:	// 读命令
-				// do nothing
+				meterData = new MeterData();
+				meterData.dataId.ints[0] = dataId[0] & 0xFF;
+				meterData.dataId.ints[1] = dataId[1] & 0xFF;
 				break;
 			case 0x04:	// 写命令
-				meterData = MeterData.createByTag(meterData.getDataTag());
+				String dataTag = NetUtils.noSpaceHexStr(DataUtils.arrayToHexStr(dataId)).toUpperCase();
+				meterData = MeterData.createByTagAndJson(dataTag, data);
 				if (meterData == null) {
 					return;
 				}
-				meterData.dataId[0] = dataId[0] & 0xFF;
-				meterData.dataId[1] = dataId[1] & 0xFF;
-				try {
-					meterData.loadFromJsonObject(data);
-				} catch (Exception e) {
-					e.printStackTrace();
-					return;
-				}
+				meterData.dataId.ints[0] = dataId[0] & 0xFF;
+				meterData.dataId.ints[1] = dataId[1] & 0xFF;
 				break;
 			default:
 				return;
